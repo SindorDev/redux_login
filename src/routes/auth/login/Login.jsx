@@ -1,8 +1,25 @@
-import { Button, Checkbox, Form, Input } from 'antd';
-
+import { Button, Checkbox, Form, Input, Typography, Divider } from 'antd';
+import { Link } from 'react-router-dom';
+const { Title, Text } = Typography
+import axios from "../../../api/data"
+import { useDispatch, } from 'react-redux';
+import { GoogleLogin } from '@react-oauth/google';
 const Login = () => {
-  const onFinish = (values) => {
+  const dispatch = useDispatch()
+
+  const onFinish = async (values) => {
     console.log('Success:', values);
+    try{
+      dispatch({type: "LOADING"})
+    const response = await axios.post("/auth.login", values)
+    console.log(response);
+    if(response.status === 200 && response.data.payload.token) {
+      dispatch({type: "LOGIN_USER", token: response.data.payload.token, user: response.data.payload.user})
+    }
+    }
+    catch(error) {
+      dispatch({type: "ERROR", message: error.response.data.message  || error})
+    }
   };
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
@@ -11,15 +28,20 @@ const Login = () => {
  
   return (
  
-    <div className='shadow-cm rounded-[10px] w-full max-w-[450px] min-h-[400px] flex items-center justify-center'>
+    <div className='shadow-cm rounded-[10px] w-full max-w-[500px]  py-[20px] flex-col flex items-center justify-center'>
+      <Title>Login</Title>
 <Form
 
     name="basic"
+    layout='vertical'
+    style={{
+      maxWidth: 600,
+    }}
     labelCol={{
       span: 8,
     }}
     wrapperCol={{
-      span: 16,
+      span: 24,
     }}
     initialValues={{
       remember: true,
@@ -28,19 +50,6 @@ const Login = () => {
     onFinishFailed={onFinishFailed}
     autoComplete="off"
   >
-    <Form.Item
-      label="FirstName"
-      name="firstName"
-      rules={[
-        {
-          required: true,
-          message: 'Please input your username!',
-        },
-      ]}
-    >
-    </Form.Item>
-      <Input />
-
     <Form.Item
     className='w-[350px]'
       label="Username"
@@ -52,8 +61,8 @@ const Login = () => {
         },
       ]}
     >
-    </Form.Item>
       <Input />
+    </Form.Item>
 
       <Form.Item
       label="Password"
@@ -65,8 +74,8 @@ const Login = () => {
         },
       ]}
     >
-    </Form.Item>
       <Input.Password />
+    </Form.Item>
 
     <Form.Item
       name="remember"
@@ -82,7 +91,6 @@ const Login = () => {
 
     <Form.Item
       wrapperCol={{
-        offset: 8,
         span: 16,
       }}
       className='ml-[100px] mt-[35px]'
@@ -91,6 +99,12 @@ const Login = () => {
         Submit
       </Button>
     </Form.Item>
+    
+    <Divider>
+        Or
+      </Divider>
+      <GoogleLogin/>
+      <Text className='text-center block my-[20px]'> Dont have an account? <Link to={"/auth/register"} >Register</Link> </Text>
   </Form>
     </div>
   )

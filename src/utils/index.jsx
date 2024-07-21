@@ -15,4 +15,4 @@ const Loading = () => {
 const SuspenseElement = ({children}) => {
      return <Suspense fallback={Loading}> {children}  </Suspense>
 }
-export { Loading, SuspenseElement }
+export { SuspenseElement }
