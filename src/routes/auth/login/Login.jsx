@@ -1,19 +1,21 @@
 import { Button, Checkbox, Form, Input, Typography, Divider } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 const { Title, Text } = Typography
 import axios from "../../../api/data"
 import { useDispatch, } from 'react-redux';
 import { GoogleLogin } from '@react-oauth/google';
 const Login = () => {
+  const navigate = useNavigate()
   const dispatch = useDispatch()
 
   const onFinish = async (values) => {
     console.log('Success:', values);
     try{
       dispatch({type: "LOADING"})
-    const response = await axios.post("/auth.login", values)
+    const response = await axios.post("/auth/login", values)
     console.log(response);
     if(response.status === 200 && response.data.payload.token) {
+      navigate("")
       dispatch({type: "LOGIN_USER", token: response.data.payload.token, user: response.data.payload.user})
     }
     }

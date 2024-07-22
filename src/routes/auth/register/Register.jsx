@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 import { GoogleLogin } from '@react-oauth/google';
 const { Title, Text } = Typography
 import axios from "../../../api/data"
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, } from 'react-redux';
 const Register = () => {
+  const navigate = useNavigate()
   const dispatch = useDispatch()
   const onFinish = async (values) => {
     console.log('Success:', values);
@@ -13,6 +15,7 @@ const Register = () => {
     const response = await axios.post("/auth", values)
     console.log(response);
     if(response.status === 200 && response.data.payload.token) {
+      navigate("")
       dispatch({type: "REGISTER_USER", token: response.data.payload.token, user: response.data.payload.user})
     }
     }
@@ -52,7 +55,7 @@ const Register = () => {
     <Form.Item
 
       label="FirstName"
-      name="firstName"
+      name="first_name"
       rules={[
         {
           required: true,
