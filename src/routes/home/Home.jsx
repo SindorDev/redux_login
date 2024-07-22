@@ -3,8 +3,12 @@ const Home = () => {
 
   const navigate = useNavigate()
 
+
+
   return (
-    <div>{navigate("auth")}</div>
+    <div>
+      <button onClick={() => navigate("auth")}>Register</button>
+    </div>
   )
 }
 
