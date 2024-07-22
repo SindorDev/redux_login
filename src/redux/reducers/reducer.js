@@ -31,6 +31,10 @@ const reducer = (state = initialState, action) => {
                     isError: true,
                     error: action.message
                }
+          default: 
+               return {
+                    state
+               }
      }
 }
 

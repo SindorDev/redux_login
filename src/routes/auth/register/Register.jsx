@@ -119,6 +119,7 @@ const Register = () => {
       <Divider>
         Or
       </Divider>
+      <div className='ml-[50px] '>
       <GoogleLogin
   onSuccess={credentialResponse => {
     console.log(credentialResponse);
@@ -127,6 +128,7 @@ const Register = () => {
     console.log('Login Failed');
   }}
 />;
+      </div>
     <Text className='text-center block my-[20px]'> Already have an account? <Link to='/auth'>Login</Link> </Text>
   </Form>
     </div>

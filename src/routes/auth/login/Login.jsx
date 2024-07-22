@@ -105,7 +105,17 @@ const Login = () => {
     <Divider>
         Or
       </Divider>
-      <GoogleLogin/>
+      
+      <div className='ml-[50px] '>
+      <GoogleLogin
+  onSuccess={credentialResponse => {
+    console.log(credentialResponse);
+  }}
+  onError={() => {
+    console.log('Login Failed');
+  }}
+/>;
+      </div>
       <Text className='text-center block my-[20px]'> Dont have an account? <Link to={"/auth/register"} >Register</Link> </Text>
   </Form>
     </div>

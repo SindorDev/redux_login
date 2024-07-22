@@ -4,7 +4,7 @@ const Auth = () => {
   return (
     <div className="w-screen h-screen flex items-center justify-center">
       <div className="flex items-center justify-center w-full h-full shadow-cm">
-        <GoogleOAuthProvider clientId={import.meta.env.Google_ClientId}>
+        <GoogleOAuthProvider clientId={import.meta.env.VITE_Google_CLIEND_ID}>
         <Outlet/>
         </GoogleOAuthProvider>
       </div>
