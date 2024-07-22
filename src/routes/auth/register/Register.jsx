@@ -4,18 +4,18 @@ import { GoogleLogin } from '@react-oauth/google';
 const { Title, Text } = Typography
 import axios from "../../../api/data"
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
 const Register = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const authData = useSelector(state => state)
   const onFinish = async (values) => {
-    console.log('Success:', values);
     try{
       dispatch({type: "LOADING"})
     const response = await axios.post("/auth", values)
     console.log(response);
     if(response.status === 200 && response.data.payload.token) {
-      navigate("")
       dispatch({type: "REGISTER_USER", token: response.data.payload.token, user: response.data.payload.user})
     }
     }
@@ -23,6 +23,12 @@ const Register = () => {
       dispatch({type: "ERROR", message: error.response.data.message  || error})
     }
   };
+  
+  useEffect(() => {
+    if(authData.state.token) {
+      navigate("/dashboard")
+    }
+  }, [authData])
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
   };
@@ -112,7 +118,7 @@ const Register = () => {
       }}
       className='ml-[100px] mt-[35px]'
     >
-      <Button type="primary" htmlType="submit" className='w-full'>
+      <Button type="primary" disabled={authData.loading} loading={authData.loading} htmlType="submit" className='w-full'>
         Register
       </Button>
     </Form.Item>
@@ -121,8 +127,23 @@ const Register = () => {
       </Divider>
       <div className='ml-[50px] '>
       <GoogleLogin
-  onSuccess={credentialResponse => {
-    console.log(credentialResponse);
+  onSuccess={async credentialResponse => {
+    const decodedData = JSON.parse(atob(credentialResponse.credential.split(".")[1]));
+    const user = {
+      username: decodedData.email,
+      first_name: decodedData.name,
+      password: decodedData.sub
+    }
+    try{
+      dispatch({type: "LOADING"})
+    const response = await axios.post("/auth", user)
+    if(response.status === 200 && response.data.payload.token) {
+      dispatch({type: "REGISTER_USER", token: response.data.payload.token, user: response.data.payload.user})
+    }
+    }
+    catch(error) {
+      dispatch({type: "ERROR", message: error.response.data.message  || error})
+    }
   }}
   onError={() => {
     console.log('Login Failed');
@@ -135,14 +156,3 @@ const Register = () => {
   )
 }
 export default Register
-
-
-
-
-
-
-
-
-
-
-

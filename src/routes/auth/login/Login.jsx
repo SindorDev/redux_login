@@ -2,11 +2,14 @@ import { Button, Checkbox, Form, Input, Typography, Divider } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 const { Title, Text } = Typography
 import axios from "../../../api/data"
-import { useDispatch, } from 'react-redux';
+import { useDispatch, useSelector, } from 'react-redux';
 import { GoogleLogin } from '@react-oauth/google';
+import { useEffect } from 'react';
 const Login = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const [form] = Form.useForm()
+  const authData = useSelector(state => state)
 
   const onFinish = async (values) => {
     console.log('Success:', values);
@@ -15,25 +18,29 @@ const Login = () => {
     const response = await axios.post("/auth/login", values)
     console.log(response);
     if(response.status === 200 && response.data.payload.token) {
-      navigate("")
       dispatch({type: "LOGIN_USER", token: response.data.payload.token, user: response.data.payload.user})
+      form.resetFields()
     }
     }
     catch(error) {
       dispatch({type: "ERROR", message: error.response.data.message  || error})
-    }
+    } 
   };
+
+  useEffect(() => {
+    if(authData.state.token) {
+      navigate("/dashboard")
+    }
+  }, [authData])
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
   };
-
- 
   return (
  
     <div className='shadow-cm rounded-[10px] w-full max-w-[500px]  py-[20px] flex-col flex items-center justify-center'>
       <Title>Login</Title>
 <Form
-
+  form={form}
     name="basic"
     layout='vertical'
     style={{
@@ -97,7 +104,7 @@ const Login = () => {
       }}
       className='ml-[100px] mt-[35px]'
     >
-      <Button type="primary" htmlType="submit" className='w-full'>
+      <Button type="primary" disabled={authData.loading} loading={authData.loading} htmlType="submit" className='w-full'>
         Submit
       </Button>
     </Form.Item>
@@ -108,8 +115,24 @@ const Login = () => {
       
       <div className='ml-[50px] '>
       <GoogleLogin
-  onSuccess={credentialResponse => {
-    console.log(credentialResponse);
+  onSuccess={async credentialResponse => {
+    
+    const decodedData = JSON.parse(atob(credentialResponse.credential.split(".")[1]));
+    const user = {
+      username: decodedData.email,
+      password: decodedData.sub
+    }
+    try{
+      dispatch({type: "LOADING"})
+    const response = await axios.post("/auth/login", user)
+    if(response.status === 200 && response.data.payload.token) {
+      navigate("/")
+      dispatch({type: "LOGIN_USER", token: response.data.payload.token, user: response.data.payload.user})
+    }
+    }
+    catch(error) {
+      dispatch({type: "ERROR", message: error.response.data.message  || error})
+    }
   }}
   onError={() => {
     console.log('Login Failed');
