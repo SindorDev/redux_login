@@ -10,9 +10,8 @@ const Users = lazy(() => import("./dashboard/users/Users"))
 const Protected = lazy(() => import("./dashboard/protected/Protected"))
 import { SuspenseElement as Suspense } from "../utils/index";
 import { useSelector } from "react-redux";
-
 const RouteController = () => {
-  const authData = useSelector(state => state)
+  const verify = useSelector(state => state)
 
   return useRoutes([
     
@@ -26,10 +25,8 @@ const RouteController = () => {
       ),
     },
     {
-      path: "auth",
-      element: (
-       authData.state.token ? <Navigate to="/dashboard"/> : <Suspense> <Auth /> </Suspense>
-      ), 
+      path: "/auth",
+      element:  verify.state.token ? <Navigate to="/dashboard"/> : <Suspense> <Auth /> </Suspense>, 
       children: [
         {
           path: "",
@@ -50,7 +47,7 @@ const RouteController = () => {
       ],
     },
     {
-      path: "dashboard",
+      path: "/dashboard",
       element: <Suspense><Protected/></Suspense>,
       children: [
         {

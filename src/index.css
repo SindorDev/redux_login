@@ -14,3 +14,8 @@
 .ant-form-item{
      margin-bottom: 5px !important;
 }
+
+.ant-layout-sider-children {
+     display: flex;
+     flex-direction: column;
+}

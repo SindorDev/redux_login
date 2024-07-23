@@ -1,35 +1,80 @@
 import { UserOutlined, ProductFilled } from "@ant-design/icons";
-import { Layout, Menu, Avatar, Typography } from "antd";
-import { useSelector } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { Layout, Button,  Modal, Menu, Avatar, Typography } from "antd";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useFetch } from "../../hooks/useFetch"
+import { LiaDoorOpenSolid } from "react-icons/lia";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 const { Sider } = Layout;
 const {Text} = Typography
 
 // eslint-disable-next-line react/prop-types, no-unused-vars
 const Sidebar = ({ collapsed }) => {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const [data] = useFetch("/auth/profile")
+  const userInfo = data.payload
 
-  const authData = useSelector(state => state)
+  const [open, setOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [modalText, setModalText] = useState('Content of the modal');
+  const showModal = () => {
+    setOpen(true);
+  };
+  const handleOk = () => {
+    setModalText('The modal will be closed after two seconds');
+    setConfirmLoading(true);
+    setOpen(false)
+    window.location.reload()
+  };
+  
+  useEffect(() => {
+    if(confirmLoading === true) {
+      dispatch({type: "SIGN_OUT"})
+      navigate("/auth")
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [confirmLoading])
 
+  const handleCancel = () => {
+    setOpen(false);
+  };
+
+  const handleRemoveUser =  () => {
+    showModal()
+  }
   return (
-    <Sider trigger={null} collapsible collapsed={collapsed} className="py-[10px]">
+    <>
+      <Modal
+        title="Title"
+        open={open}
+        onOk={handleOk}
+        confirmLoading={confirmLoading}
+        onCancel={handleCancel}
+      >
+        <p>{modalText}</p>
+      </Modal>
+    <Sider trigger={null} collapsible collapsed={collapsed} className="px-[5px] py-[10px] flex flex-col justify-between ">
       
-      <div className="flex  items-center">
+      <div className="flex p-3  whitespace-nowrap overflow-hidden gap-4 items-center">
       <Avatar
-      size={35}
+      size={"large"}
       style={{
-        marginInline: "20px",
-        marginBlock: "15px",
         backgroundColor: '#87d068',
       }}
       icon={<UserOutlined />}
-    />
-      <Text className="text-white overflow-hidden whitespace-nowrap">
-        <span>{authData?.state?.user?.username || "John Doe"}</span>
-          <br/>
-        <span className="text-[12px]">{authData?.state?.user?.username || "User"}</span>
-      </Text>
+    >
+    </Avatar>
+        
+    <Text className="text-white  flex flex-col">
+            <span>{userInfo?.first_name}</span>
+            <span className="text-[12px]">{userInfo?.role}</span>
+    </Text>
+          
+      
       </div>
       <Menu
+      className="flex-1"
         theme="dark"
         mode="inline"
         defaultSelectedKeys={["1"]}
@@ -46,8 +91,11 @@ const Sidebar = ({ collapsed }) => {
           },
         ]}
       />
+      <Button className="bg-red-500 w-full p-5 mb-[20px]" onClick={handleRemoveUser} type="primary"><LiaDoorOpenSolid size={"24px"} />Sign Out</Button>
     </Sider>
-  );
-};
+    
+    </>
+  )
+}
 
 export default Sidebar;

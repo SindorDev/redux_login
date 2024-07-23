@@ -35,6 +35,14 @@ const reducer = (state = initialState, action) => {
                     isError: true,
                     error: action.message
                }
+               
+          case "SIGN_OUT":
+               localStorage.removeItem("x-auth-token")
+               return {
+                    token: null,
+                    user: null,
+                    ...state,
+               }
           default: 
                return {
                     state

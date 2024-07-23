@@ -4,7 +4,6 @@ const { Title, Text } = Typography
 import axios from "../../../api/data"
 import { useDispatch, useSelector, } from 'react-redux';
 import { GoogleLogin } from '@react-oauth/google';
-import { useEffect } from 'react';
 const Login = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -19,6 +18,7 @@ const Login = () => {
     console.log(response);
     if(response.status === 200 && response.data.payload.token) {
       dispatch({type: "LOGIN_USER", token: response.data.payload.token, user: response.data.payload.user})
+      navigate("/dashboard")
       form.resetFields()
     }
     }
@@ -26,12 +26,6 @@ const Login = () => {
       dispatch({type: "ERROR", message: error.response.data.message  || error})
     } 
   };
-
-  useEffect(() => {
-    if(authData.state.token) {
-      navigate("/dashboard")
-    }
-  }, [authData])
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
   };
@@ -126,8 +120,10 @@ const Login = () => {
       dispatch({type: "LOADING"})
     const response = await axios.post("/auth/login", user)
     if(response.status === 200 && response.data.payload.token) {
-      navigate("/")
       dispatch({type: "LOGIN_USER", token: response.data.payload.token, user: response.data.payload.user})
+      window.location.reload()
+      navigate("/dashboard")
+      form.resetFields()
     }
     }
     catch(error) {
@@ -137,7 +133,7 @@ const Login = () => {
   onError={() => {
     console.log('Login Failed');
   }}
-/>;
+/>
       </div>
       <Text className='text-center block my-[20px]'> Dont have an account? <Link to={"/auth/register"} >Register</Link> </Text>
   </Form>

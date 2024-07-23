@@ -5,8 +5,8 @@ const { Title, Text } = Typography
 import axios from "../../../api/data"
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
 const Register = () => {
+  const form = Form.useForm()
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const authData = useSelector(state => state)
@@ -14,9 +14,11 @@ const Register = () => {
     try{
       dispatch({type: "LOADING"})
     const response = await axios.post("/auth", values)
-    console.log(response);
     if(response.status === 200 && response.data.payload.token) {
       dispatch({type: "REGISTER_USER", token: response.data.payload.token, user: response.data.payload.user})
+      navigate("dashboard")
+      form.resetFields()
+
     }
     }
     catch(error) {
@@ -24,17 +26,13 @@ const Register = () => {
     }
   };
   
-  useEffect(() => {
-    if(authData.state.token) {
-      navigate("/dashboard")
-    }
-  }, [authData])
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
   };
 
  
   return (
+
  
     <div className='shadow-cm flex-col rounded-[10px] w-full max-w-[500px] p-[20px] flex items-center justify-center'>
       <Title>Register</Title>
@@ -139,6 +137,9 @@ const Register = () => {
     const response = await axios.post("/auth", user)
     if(response.status === 200 && response.data.payload.token) {
       dispatch({type: "REGISTER_USER", token: response.data.payload.token, user: response.data.payload.user})
+      navigate("dashboard")
+      window.location.reload()
+      form.resetFields()
     }
     }
     catch(error) {
@@ -148,7 +149,7 @@ const Register = () => {
   onError={() => {
     console.log('Login Failed');
   }}
-/>;
+/>
       </div>
     <Text className='text-center block my-[20px]'> Already have an account? <Link to='/auth'>Login</Link> </Text>
   </Form>
