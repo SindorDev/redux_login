@@ -32,7 +32,9 @@ const Products = () => {
   
       for(let i = 0; i < productImage.length; i++) {
         form.append("product_images", productImage[i])
+        console.log(productImage);
       }
+      console.log(form);
   
       fetch("http://localhost:8000/product/create", {
         method: "POST",
@@ -195,7 +197,7 @@ const Products = () => {
       rules={[{ required: true, message: 'Please enter description!' }]}
     >
     </TextArea>
-        <input type="file" multiple accept="image/png image/webp image/jpg image/jpeg " onChange={(e) => setProductImage(e.target.files)} />
+        <input type="file" multiple accept="image/png, image/webp, image/jpg, image/jpeg " onChange={(e) => setProductImage(e.target.files)} />
         <div className="flex items-end justify-end">
           
     <Form.Item>
