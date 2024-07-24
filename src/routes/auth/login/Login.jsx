@@ -1,11 +1,10 @@
 import { Button, Checkbox, Form, Input, Typography, Divider } from 'antd';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 const { Title, Text } = Typography
 import axios from "../../../api/data"
 import { useDispatch, useSelector, } from 'react-redux';
 import { GoogleLogin } from '@react-oauth/google';
 const Login = () => {
-  const navigate = useNavigate()
   const dispatch = useDispatch()
   const [form] = Form.useForm()
   const authData = useSelector(state => state)
@@ -15,10 +14,8 @@ const Login = () => {
     try{
       dispatch({type: "LOADING"})
     const response = await axios.post("/auth/login", values)
-    console.log(response);
     if(response.status === 200 && response.data.payload.token) {
       dispatch({type: "LOGIN_USER", token: response.data.payload.token, user: response.data.payload.user})
-      navigate("/dashboard")
       form.resetFields()
     }
     }
@@ -121,8 +118,6 @@ const Login = () => {
     const response = await axios.post("/auth/login", user)
     if(response.status === 200 && response.data.payload.token) {
       dispatch({type: "LOGIN_USER", token: response.data.payload.token, user: response.data.payload.user})
-      window.location.reload()
-      navigate("/dashboard")
       form.resetFields()
     }
     }

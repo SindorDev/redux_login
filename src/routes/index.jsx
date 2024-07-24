@@ -25,7 +25,7 @@ const RouteController = () => {
       ),
     },
     {
-      path: "/auth",
+      path: "auth",
       element:  verify.state.token ? <Navigate to="/dashboard"/> : <Suspense> <Auth /> </Suspense>, 
       children: [
         {
@@ -47,7 +47,7 @@ const RouteController = () => {
       ],
     },
     {
-      path: "/dashboard",
+      path: "dashboard",
       element: <Suspense><Protected/></Suspense>,
       children: [
         {

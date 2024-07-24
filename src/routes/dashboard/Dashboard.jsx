@@ -8,7 +8,7 @@ const Dashboard = () => {
   const [collapsed, setCollapsed] = useState(false)
  
   return (
-    <Layout className="h-screen">
+    <Layout className="min-h-screen">
         <Sidebar collapsed={collapsed}/>
         <Layout>
             <Header collapsed={collapsed} setCollapsed={setCollapsed}/>

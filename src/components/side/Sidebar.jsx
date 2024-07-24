@@ -1,6 +1,6 @@
 import { UserOutlined, ProductFilled } from "@ant-design/icons";
 import { Layout, Button,  Modal, Menu, Avatar, Typography } from "antd";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useFetch } from "../../hooks/useFetch"
 import { LiaDoorOpenSolid } from "react-icons/lia";
 import { useEffect, useState } from "react";
@@ -11,7 +11,6 @@ const {Text} = Typography
 // eslint-disable-next-line react/prop-types, no-unused-vars
 const Sidebar = ({ collapsed }) => {
   const dispatch = useDispatch()
-  const navigate = useNavigate()
   const [data] = useFetch("/auth/profile")
   const userInfo = data.payload
 
@@ -31,7 +30,6 @@ const Sidebar = ({ collapsed }) => {
   useEffect(() => {
     if(confirmLoading === true) {
       dispatch({type: "SIGN_OUT"})
-      navigate("/auth")
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [confirmLoading])
@@ -56,7 +54,7 @@ const Sidebar = ({ collapsed }) => {
       </Modal>
     <Sider trigger={null} collapsible collapsed={collapsed} className="px-[5px] py-[10px] flex flex-col justify-between ">
       
-      <div className="flex p-3  whitespace-nowrap overflow-hidden gap-4 items-center">
+      <div className="flex p-4  whitespace-nowrap overflow-hidden gap-4 items-center">
       <Avatar
       size={"large"}
       style={{
@@ -65,11 +63,12 @@ const Sidebar = ({ collapsed }) => {
       icon={<UserOutlined />}
     >
     </Avatar>
-        
+        {!collapsed && 
     <Text className="text-white  flex flex-col">
+      
             <span>{userInfo?.first_name}</span>
             <span className="text-[12px]">{userInfo?.role}</span>
-    </Text>
+    </Text>}
           
       
       </div>
@@ -91,9 +90,8 @@ const Sidebar = ({ collapsed }) => {
           },
         ]}
       />
-      <Button className="bg-red-500 w-full p-5 mb-[20px]" onClick={handleRemoveUser} type="primary"><LiaDoorOpenSolid size={"24px"} />Sign Out</Button>
-    </Sider>
-    
+      <Button className="bg-red-500 w-full p-5 mb-[20px]" onClick={handleRemoveUser} type="primary"><LiaDoorOpenSolid size={"24px"} />{!collapsed && "Sign Out"}</Button>
+    </Sider>    
     </>
   )
 }

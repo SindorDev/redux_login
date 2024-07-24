@@ -6,7 +6,8 @@ const initialState = {
      loading: false,
      error: null,
      isSuccessful: false,
-     isError: false
+     isError: false,
+     productID: null
 }
 
 const reducer = (state = initialState, action) => {
@@ -17,7 +18,6 @@ const reducer = (state = initialState, action) => {
                saveToLocalStorage("x-auth-token", action.token)
                return {
                     ...state,
-                    token: action.token,
                     user: action.user,
                     loading: false,
                     isSuccessful: true,
@@ -42,6 +42,12 @@ const reducer = (state = initialState, action) => {
                     token: null,
                     user: null,
                     ...state,
+               }
+
+          case "PRODUCT_ID":
+               return {
+                    ...state,
+                    productID: action.id
                }
           default: 
                return {

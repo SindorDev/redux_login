@@ -1,11 +1,35 @@
-
+import { useState } from "react";
+import { Button, Modal } from "antd";
+import { ContentTitle } from "../../../utils/index";
 
 const Users = () => {
-  return (
-    <div>
-        <h1>Users</h1>      
-    </div>
-  )
-}
+  const [open, setOpen] = useState(false);
 
-export default Users
+  const showModal = () => {
+    setOpen(true);
+  };
+
+  const handleCancel = () => {
+    console.log("Clicked cancel button");
+    setOpen(false);
+  };
+
+  return (
+    <>
+      <div>
+        <div className="flex items-center justify-between">
+          <ContentTitle>Users</ContentTitle>
+          <Button type="primary" onClick={showModal}>
+            Add a new user
+          </Button>
+        </div>
+      </div>
+
+      <Modal title="Add a new User" open={open} onCancel={handleCancel}  footer={false}>
+
+      </Modal>
+    </>
+  );
+};
+
+export default Users;

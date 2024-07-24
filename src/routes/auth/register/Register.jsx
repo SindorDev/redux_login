@@ -3,11 +3,9 @@ import { Link } from 'react-router-dom';
 import { GoogleLogin } from '@react-oauth/google';
 const { Title, Text } = Typography
 import axios from "../../../api/data"
-import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 const Register = () => {
   const form = Form.useForm()
-  const navigate = useNavigate()
   const dispatch = useDispatch()
   const authData = useSelector(state => state)
   const onFinish = async (values) => {
@@ -16,9 +14,7 @@ const Register = () => {
     const response = await axios.post("/auth", values)
     if(response.status === 200 && response.data.payload.token) {
       dispatch({type: "REGISTER_USER", token: response.data.payload.token, user: response.data.payload.user})
-      navigate("dashboard")
       form.resetFields()
-
     }
     }
     catch(error) {
@@ -137,7 +133,6 @@ const Register = () => {
     const response = await axios.post("/auth", user)
     if(response.status === 200 && response.data.payload.token) {
       dispatch({type: "REGISTER_USER", token: response.data.payload.token, user: response.data.payload.user})
-      navigate("dashboard")
       window.location.reload()
       form.resetFields()
     }
