@@ -46,6 +46,12 @@ const columns = [
 
 const TableProduct =  ({showModal}) => {
   const [data, setData] = useState(null)
+  const [tableParams] = useState({
+    pagination: {
+      pageSize: 6,
+    },
+  });
+  
   const dispatch = useDispatch()
   useEffect(() => {
 
@@ -59,8 +65,6 @@ const TableProduct =  ({showModal}) => {
   })
   
 }, [])
-
-
   const handleDelete = async (id) => {
     const response = await axios.delete(`/product/${id}`)
     window.location.reload()
@@ -91,7 +95,7 @@ const TableProduct =  ({showModal}) => {
     <>
 
     <Flex gap="middle" vertical>
-      <Table columns={columns} dataSource={dataSource} />
+      <Table columns={columns} dataSource={dataSource} pagination={tableParams.pagination} />
     </Flex>
     </>
   )

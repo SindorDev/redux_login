@@ -210,6 +210,6 @@ const Products = () => {
     </Modal>
     </>
   )
-};
+}
 
 export default Products
