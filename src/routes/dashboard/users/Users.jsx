@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button, Modal } from "antd";
 import { ContentTitle } from "../../../utils/index";
-
+import Table from "../../../components/table/Table"
 const Users = () => {
   const [open, setOpen] = useState(false);
 
@@ -24,6 +24,11 @@ const Users = () => {
           </Button>
         </div>
       </div>
+
+      <div>
+        <Table/>
+      </div>
+
 
       <Modal title="Add a new User" open={open} onCancel={handleCancel}  footer={false}>
 

@@ -90,7 +90,61 @@ const Products = () => {
 
   const [categoryData] = useFetch("/product/category")
   const [productType] = useFetch("/product/product-type")
+
+
+  const columns = [
+    {
+      key: "name",
+      title: 'Name',
+      dataIndex: 'name',
+      sorter: true,
+    },
+    {
+      key: "original_price",
+      title: 'Original Price',
+      dataIndex: 'original_price',
+      sorter: true,
+    },
+    {
+      key: "sale_price",
+      title: 'Sale Price',
+      dataIndex: 'sale_price',
+      sorter: true,
+    },
+    {
+      key: "stock",
+      title: 'Stock',
+      dataIndex: 'number_in_stock',
+      sorter: true,
+    },
+    {
+      key: "category",
+      title: 'Category',
+      dataIndex: 'category',
+      sorter: true,
+    },
+    {
+      key: "product_type",
+      title: 'Product Type',
+      dataIndex: 'product_type',
+      sorter: true,
+    },
+    {
+      title: 'Update',
+      dataIndex: 'update',
+    },
+    {
+      title: 'Delete',
+      dataIndex: 'delete',
+    },
+  ];
+
+
+  
   return (
+    
+  
+    
     <>
     
 
@@ -103,7 +157,7 @@ const Products = () => {
     </div>
 
       <div className="h-full">
-        <TableProduct showModal={showModal} />
+        <TableProduct showModal={showModal} columns={columns} />
       </div>
     
 
