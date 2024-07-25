@@ -1,6 +1,6 @@
 import { UserOutlined, ProductFilled } from "@ant-design/icons";
 import { Layout, Button,  Modal, Menu, Avatar, Typography } from "antd";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useFetch } from "../../hooks/useFetch"
 import { LiaDoorOpenSolid } from "react-icons/lia";
 import { useEffect, useState } from "react";
@@ -10,21 +10,26 @@ const {Text} = Typography
 
 // eslint-disable-next-line react/prop-types, no-unused-vars
 const Sidebar = ({ collapsed }) => {
+  const navigate = useNavigate()
   const dispatch = useDispatch()
   const [data] = useFetch("/auth/profile")
+
   const userInfo = data.payload
+
 
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [modalText, setModalText] = useState('Content of the modal');
+  const [modalText, setModalText] = useState('Do you really want to log out?');
   const showModal = () => {
     setOpen(true);
   };
   const handleOk = () => {
-    setModalText('The modal will be closed after two seconds');
+    setModalText('Checkout completed successfully');
     setConfirmLoading(true);
-    setOpen(false)
-    window.location.reload()
+    setTimeout(() => {
+      setOpen(false);
+      navigate("/auth")
+    }, 1500)
   };
   
   useEffect(() => {
@@ -44,7 +49,7 @@ const Sidebar = ({ collapsed }) => {
   return (
     <>
       <Modal
-        title="Title"
+        title="Logout"
         open={open}
         onOk={handleOk}
         confirmLoading={confirmLoading}

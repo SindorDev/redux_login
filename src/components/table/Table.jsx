@@ -43,7 +43,6 @@ const TableProduct = ({ showModal, columns }) => {
       const { payload } = response.data;
       setData(payload);
       setLoading(false);
-      console.log(response.data);
       setTableParams({
         pagination: {
           ...tableParams.pagination,

@@ -13,6 +13,8 @@ import { useSelector } from "react-redux";
 const RouteController = () => {
   const verify = useSelector(state => state)
 
+
+
   return useRoutes([
     
     {
@@ -26,7 +28,7 @@ const RouteController = () => {
     },
     {
       path: "auth",
-      element:  verify.state.token ? <Navigate to="/dashboard"/> : <Suspense> <Auth /> </Suspense>, 
+      element:  verify.token ? <Navigate to="/dashboard"/> : <Suspense> <Auth /> </Suspense>, 
       children: [
         {
           path: "",

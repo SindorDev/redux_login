@@ -20,7 +20,7 @@ apiInstance.interceptors.response.use((response) => {
      }
 },  
      (error) => {
-          if(error.response?.status === 401 || error.response?.status === 403 || error.response?.status === 405) {
+          if(error.response?.status === 401 || error.response?.status === 403 || error.response?.status === 404) {
                store.dispatch({type: "SIGN_OUT"})
           }
           return Promise.reject(error)

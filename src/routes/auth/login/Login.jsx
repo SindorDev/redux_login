@@ -4,7 +4,9 @@ const { Title, Text } = Typography
 import axios from "../../../api/data"
 import { useDispatch, useSelector, } from 'react-redux';
 import { GoogleLogin } from '@react-oauth/google';
+import { useNavigate } from 'react-router-dom';
 const Login = () => {
+  const navigate = useNavigate()
   const dispatch = useDispatch()
   const [form] = Form.useForm()
   const authData = useSelector(state => state)
@@ -16,6 +18,7 @@ const Login = () => {
     const response = await axios.post("/auth/login", values)
     if(response.status === 200 && response.data.payload.token) {
       dispatch({type: "LOGIN_USER", token: response.data.payload.token, user: response.data.payload.user})
+      navigate("/dashboard")
       form.resetFields()
     }
     }
@@ -96,7 +99,7 @@ const Login = () => {
       className='ml-[100px] mt-[35px]'
     >
       <Button type="primary" disabled={authData.loading} loading={authData.loading} htmlType="submit" className='w-full'>
-        Submit
+        Login
       </Button>
     </Form.Item>
     
@@ -118,6 +121,7 @@ const Login = () => {
     const response = await axios.post("/auth/login", user)
     if(response.status === 200 && response.data.payload.token) {
       dispatch({type: "LOGIN_USER", token: response.data.payload.token, user: response.data.payload.user})
+      navigate("/dashboard")
       form.resetFields()
     }
     }
