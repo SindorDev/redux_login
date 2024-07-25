@@ -159,9 +159,6 @@ const Products = () => {
       <div className="h-full">
         <TableProduct showModal={showModal} columns={columns} />
       </div>
-    
-
-    
     <Modal title="Add a new User" open={open} centered onCancel={handleCancel}  footer={null}>
 
 
