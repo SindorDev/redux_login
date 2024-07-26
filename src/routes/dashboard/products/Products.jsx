@@ -1,215 +1,240 @@
 import { useState } from "react";
-import { Button, Modal, Form, Select, Input } from "antd"
-import { ContentTitle } from "../../../utils/index"
-import {useFetch} from "../../../hooks/useFetch"
+import { Button, Modal } from "antd";
+import { ContentTitle } from "../../../utils/index";
+import { useFetch } from "../../../hooks/useFetch";
 import { useSelector } from "react-redux";
-const {TextArea} = Input
-
+import ProductFrom from "../../../components/productForm/ProductFrom";
+import TableComponent from "../../../components/table/Table";
+import axios from "../../../api/data";
 const Products = () => {
-  const authData = useSelector(state => state)
+  const authData = useSelector((state) => state);
   const [open, setOpen] = useState(false);
-  const [productImage, setProductImage] = useState(null)
+  const [updateProduct, setUpdateProduct] = useState(null);
+  const [productImage, setProductImage] = useState(null);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [modalText, setModalText] = useState(
+    "Do you really want to open the product?"
+  );
+  const [deleteProduct, setDeleteProduct] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
   const showModal = () => {
     setOpen(true);
   };
 
+  const [tableParams, setTableParams] = useState({
+    pagination: {
+      current: 1,
+      pageSize: 5,
+    },
+  });
+
+  const handleUpdateProduct = (product) => {
+    setUpdateProduct(product);
+    setOpen(true);
+  };
+
+  const columns = [
+    {
+      count: 1,
+      title: "No",
+      key: "id",
+      render: (data, current, index) =>
+        tableParams.pagination.current * tableParams.pagination.pageSize -
+        tableParams.pagination.pageSize +
+        (index + 1),
+    },
+    {
+      key: "name",
+      title: "Product Name",
+      dataIndex: "product_name",
+      render: (product_name) => `${product_name}`,
+      sorter: true,
+    },
+    {
+      key: "OPrice",
+      title: "Original Price",
+      dataIndex: "original_price",
+      render: (original_price) => `${original_price}`,
+      sorter: true,
+    },
+
+    {
+      key: "SPrice",
+      title: "Sale Price",
+      dataIndex: "sale_price",
+      render: (sale_price) => `${sale_price}`,
+      sorter: true,
+    },
+
+    {
+      key: "stock",
+      title: "Stock",
+      dataIndex: "number_in_stock",
+      render: (number_in_stock) => `${number_in_stock}`,
+      sorter: true,
+    },
+
+    {
+      key: "category",
+      title: "Category",
+      dataIndex: "category",
+      render: (category) => `${category}`,
+      sorter: true,
+    },
+    {
+      key: "product_type",
+      title: "Product Type",
+      dataIndex: "product_type",
+      render: (product_type) => `${product_type}`,
+      sorter: true,
+    },
+
+    {
+      key: "images",
+      title: "Images",
+      dataIndex: "product_images",
+      render: (product_images) => (
+        <img src={`${product_images[0]}`} width={50} alt="product_name" />
+      ),
+    },
+
+    {
+      key: "Action",
+      title: "Action",
+      render: (product) => (
+        <div className="flex items-center gap-2 ">
+          <Button
+            className="bg-yellow-400 text-white"
+            onClick={() => handleUpdateProduct(product)}
+          >
+            Update
+          </Button>
+          <Button
+            danger
+            onClick={() => handleDeleteProduct(product._id)}
+            type="primary"
+          >
+            Delete
+          </Button>
+        </div>
+      ),
+      with: "10%",
+    },
+  ];
+
+  const handleDeleteProduct = (product) => {
+    setDeleteProduct(product);
+    setModalOpen(true);
+  };
+
   const handleCancel = () => {
+    setModalOpen(false);
     setOpen(false);
+    setUpdateProduct(null);
   };
 
   const onFinish = (values) => {
-    console.log(values);
-    if(!authData.productID) {
-      const form = new FormData()
-      form.append("product_name", values.product_name)
-      form.append("description", values.description)
-      form.append("original_price", values.original_price)
-      form.append("sale_price", values.sale_price)
-      form.append("category", values.category[0])
-      form.append("product_type", values.product_type[0])
-      form.append("number_in_stock", values.number_in_stock)
-  
-      for(let i = 0; i < productImage.length; i++) {
-        form.append("product_images", productImage[i])
-        console.log(productImage);
-      }
-      console.log(form);
-  
-      fetch("http://localhost:8000/product/create", {
-        method: "POST",
-        headers: {
-          "Authorization" : "Bearer " + authData.token
-        },
-        body: form
-      })
-      
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-      })
-      .catch(error => {
-        console.log(error);
-      }) 
-    } 
-    else {
-      const form = new FormData()
-      form.append("product_name", values.product_name)
-      form.append("description", values.description)
-      form.append("original_price", values.original_price)
-      form.append("sale_price", values.sale_price)
-      form.append("category", values.category[0])
-      form.append("product_type", values.product_type[0])
-      form.append("number_in_stock", values.number_in_stock)
-  
-      for(let i = 0; i < productImage.length; i++) {
-        form.append("product_images", productImage[i])
-      }
-      fetch(`http://localhost:8000/product/update/${authData.productID}`, {
-        method: "PUT",
-        headers: {
-          "Authorization" : "Bearer " + authData.token
-        },
-        body: form
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-      })
-      .catch(error => {
-        console.log(error);
-      }) 
-    } 
+    const form = new FormData();
+    form.append("product_name", values.product_name);
+    form.append("description", values.description);
+    form.append("original_price", values.original_price);
+    form.append("sale_price", values.sale_price);
+    form.append("category", values.category[0]);
+    form.append("product_type", values.product_type[0]);
+    form.append("number_in_stock", values.number_in_stock);
 
-
+    for (let i = 0; i < productImage.length; i++) {
+      form.append("product_images", productImage[i]);
     }
-  
-  const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
+
+    fetch(updateProduct ? `http://localhost:8000/product/update/${updateProduct._id}` : "http://localhost:8000/product/create", {
+      method: updateProduct ? "PUT" : "POST",
+      headers: {
+        Authorization: "Bearer " + authData.token,
+      },
+      body: form,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        if (data.payload) {
+            setOpen(false);
+            window.location.reload();  
+            setUpdateProduct(null);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
-  const [categoryData] = useFetch("/product/category")
-  const [productType] = useFetch("/product/product-type")
+  const handleOk = () => {
+    try {
+      axios.delete(`product/${deleteProduct}`);
+    } catch (error) {
+      console.log(error);
+    }
 
-  
+    setModalText("product opened successfully");
+    setConfirmLoading(true);
+    setTimeout(() => {
+      setModalOpen(false);
+      setConfirmLoading(false);
+    }, 1500);
+    setTimeout(() => {
+      window.location.reload();
+    }, 1600);
+  };
+
+  const [categoryData] = useFetch("/product/category");
+  const [productType] = useFetch("/product/product-type");
+
   return (
-    
-  
-    
     <>
-    
-
-    
-    <div>
-      <div className="flex items-center justify-between">
-      <ContentTitle>Products</ContentTitle>     
-      <Button type="primary" onClick={showModal}>Add a new Product</Button>
+      <div>
+        <div className="flex items-center justify-between">
+          <ContentTitle>Products</ContentTitle>
+          <Button type="primary" onClick={showModal}>
+            Add a new Product
+          </Button>
+        </div>
       </div>
-    </div>
 
       <div className="h-full">
+        <TableComponent
+          columns={columns}
+          tableParams={tableParams}
+          setTableParams={setTableParams}
+          url={"/product/all"}
+        />
       </div>
-    <Modal title="Add a new User" open={open} centered onCancel={handleCancel}  footer={null}>
 
+      <ProductFrom
+        title="Add a new Product"
+        open={open}
+        setOpen={setOpen}
+        handleCancel={handleCancel}
+        onFinish={onFinish}
+        updateProduct={updateProduct}
+        setUpdateProduct={setUpdateProduct}
+        setProductImage={setProductImage}
+        categoryData={categoryData}
+        productType={productType}
+        footer={false}
+        forceRender={true}
+     />
 
-    <Form
-
-    name="basic"
-    labelCol={{ span: 16 }}
-    wrapperCol={{ span: 24 }}
-    layout="vertical"
-    style={{ maxWidth: 800, marginTop: "20px" }}
-    onFinish={onFinish}
-    onFinishFailed={onFinishFailed}
-    autoComplete="off"
-  >
-    <Form.Item
-      label="Product Name"
-      name="product_name"
-      rules={[{ required: true, message: 'Please enter  Product name !' }]}
-    >
-      <Input />
-    </Form.Item>
-
-    <div className="flex w-full gap-2 my-4 justify-between">
-    <Form.Item
-      label="original price"
-      name="original_price"
-      rules={[{ required: true, message: 'Please enter  original price !' }]}
-    >
-      <Input />
-    </Form.Item>
-
-    <Form.Item
-      label="sale price"
-      name="sale_price"
-      rules={[{ required: true, message: 'Please enter  sale price !' }]}
-    >
-      <Input />
-    </Form.Item>
-
-    <Form.Item
-      label="number stock"
-      name="number_in_stock"
-      rules={[{ required: true, message: 'Please enter  sale price !' }]}
-    >
-      <Input />
-    </Form.Item>
-
-    </div>
-
-    
-    <div className="flex w-full gap-4 my-4 justify-between">
-    <Form.Item name="category" className="w-full">
-    <Select
-        rules={[{ required: true, message: 'Please enter  Category !' }]}
-        placeholder="Enter category"
-        mode="tags"
-        maxCount={1}
-        variant="filled"
-        style={{
-          width: "100%"
-        }}
-        options={categoryData.payload?.map((category) => ({key: category, value: category, label: category}))}
-      />
-    </Form.Item>
-    <Form.Item name="product_type" className="w-full">
-    <Select
-      rules={[{ required: true, message: 'Please enter  Category !' }]}
-      placeholder="Enter sub category"
-        mode="tags"
-        maxCount={1}
-        variant="filled"
-        style={{
-          width: "100%"
-        }}
-        options={productType.payload?.map((productTypeData) => ({key: productTypeData, value: productTypeData, label: productTypeData}))}
-      />
-    </Form.Item>
-    </div>
-
-    <TextArea
-    style={{resize: "none"}}
-      maxLength={200}
-      rows={3}
-      placeholder="Enter letters maximum 200"
-      label="Description"
-      name="description"
-      rules={[{ required: true, message: 'Please enter description!' }]}
-    >
-    </TextArea>
-        <input type="file" multiple accept="image/png, image/webp, image/jpg, image/jpeg " onChange={(e) => setProductImage(e.target.files)} />
-        <div className="flex items-end justify-end">
-          
-    <Form.Item>
-      <Button className="mt-6 p-4" type="primary" htmlType="submit">
-        Add Product
-      </Button>
-    </Form.Item>
-        </div>
-  </Form>
-    </Modal>
+      <Modal
+        title="Title"
+        open={modalOpen}
+        onOk={handleOk}
+        confirmLoading={confirmLoading}
+        onCancel={handleCancel}
+      >
+        <p>{modalText}</p>
+      </Modal>
     </>
-  )
-}
+  );
+};
 
-export default Products
+export default Products;

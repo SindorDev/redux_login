@@ -8,22 +8,19 @@ import { useNavigate } from 'react-router-dom';
 const Login = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const [form] = Form.useForm()
   const authData = useSelector(state => state)
 
   const onFinish = async (values) => {
-    console.log('Success:', values);
     try{
       dispatch({type: "LOADING"})
     const response = await axios.post("/auth/login", values)
     if(response.status === 200 && response.data.payload.token) {
       dispatch({type: "LOGIN_USER", token: response.data.payload.token, user: response.data.payload.user})
       navigate("/dashboard")
-      form.resetFields()
     }
     }
     catch(error) {
-      dispatch({type: "ERROR", message: error.response.data.message  || error})
+      dispatch({type: "ERROR", message: error.response.data?.message  || error})
     } 
   };
   const onFinishFailed = (errorInfo) => {
@@ -34,7 +31,7 @@ const Login = () => {
     <div className='shadow-cm rounded-[10px] w-full max-w-[500px]  py-[20px] flex-col flex items-center justify-center'>
       <Title>Login</Title>
 <Form
-  form={form}
+
     name="basic"
     layout='vertical'
     style={{
@@ -61,7 +58,7 @@ const Login = () => {
         {
           required: true,
           message: 'Please input your password!',
-        },
+        }
       ]}
     >
       <Input />
@@ -122,7 +119,6 @@ const Login = () => {
     if(response.status === 200 && response.data.payload.token) {
       dispatch({type: "LOGIN_USER", token: response.data.payload.token, user: response.data.payload.user})
       navigate("/dashboard")
-      form.resetFields()
     }
     }
     catch(error) {
@@ -130,7 +126,7 @@ const Login = () => {
     }
   }}
   onError={() => {
-    console.log('Login Failed');
+    console.log('Login Failed')
   }}
 />
       </div>

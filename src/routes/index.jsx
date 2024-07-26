@@ -12,7 +12,7 @@ const Profile = lazy(() => import("./dashboard/profile/Profile"))
 import { SuspenseElement as Suspense } from "../utils/index";
 import { useSelector } from "react-redux";
 const RouteController = () => {
-  const verify = useSelector(state => state)
+  const authData = useSelector(state => state)
   return useRoutes([
     {
       
@@ -24,8 +24,9 @@ const RouteController = () => {
       ),
     },
     {
+      
       path: "auth",
-      element:  verify.token ? <Navigate to="/dashboard"/> : <Suspense> <Auth /> </Suspense>, 
+      element:  authData.token ? <Navigate to="/dashboard"/> : <Suspense> <Auth /> </Suspense>, 
       children: [
         {
           path: "",
@@ -42,8 +43,8 @@ const RouteController = () => {
               <Register />
             </Suspense>
           ),
-        },
-      ],
+        }
+      ]
     },
     {
       path: "dashboard",
@@ -71,6 +72,6 @@ const RouteController = () => {
       ]
     },
   ])
-};
+}
 
-export default RouteController;
+export default RouteController

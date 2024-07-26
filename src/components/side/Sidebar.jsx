@@ -1,16 +1,15 @@
 import { UserOutlined, ProductFilled } from "@ant-design/icons";
 import { Layout, Button,  Modal, Menu, Avatar, Typography } from "antd";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useFetch } from "../../hooks/useFetch"
 import { LiaDoorOpenSolid } from "react-icons/lia";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 const { Sider } = Layout;
 const {Text} = Typography
 
 // eslint-disable-next-line react/prop-types, no-unused-vars
 const Sidebar = ({ collapsed }) => {
-  const navigate = useNavigate()
   const dispatch = useDispatch()
   const [data] = useFetch("/auth/profile")
 
@@ -28,16 +27,11 @@ const Sidebar = ({ collapsed }) => {
     setConfirmLoading(true);
     setTimeout(() => {
       setOpen(false);
-      navigate("/auth")
+      dispatch({type: "SIGN_OUT"})
+
     }, 1500)
   };
-  
-  useEffect(() => {
-    if(confirmLoading === true) {
-      dispatch({type: "SIGN_OUT"})
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [confirmLoading])
+
 
   const handleCancel = () => {
     setOpen(false);
