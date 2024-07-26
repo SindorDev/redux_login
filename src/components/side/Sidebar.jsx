@@ -59,24 +59,23 @@ const Sidebar = ({ collapsed }) => {
       </Modal>
     <Sider trigger={null} collapsible collapsed={collapsed} className="px-[5px] py-[10px] flex flex-col justify-between ">
       
-      <div className="flex p-4  whitespace-nowrap overflow-hidden gap-4 items-center">
-      <Avatar
-      size={"large"}
-      style={{
-        backgroundColor: '#87d068',
-      }}
-      icon={<UserOutlined />}
-    >
+    <NavLink  className="flex p-5  whitespace-nowrap overflow-hidden gap-2 items-center" to={"/dashboard/profile"}>
+        
+    <Avatar
+     style={{
+      fontSize: "16px",
+      backgroundColor: '#87d068',
+      color: '#fff',
+    }} >
+      {userInfo?.first_name[0]}
     </Avatar>
-        {!collapsed && 
-    <Text className="text-white  flex flex-col">
-      
-            <span>{userInfo?.first_name}</span>
-            <span className="text-[12px]">{userInfo?.role}</span>
-    </Text>}
-          
-      
-      </div>
+          {!collapsed && 
+      <Text className="text-white  flex flex-col">
+        
+              <span>{userInfo?.first_name}</span>
+              <span className="text-[12px]">{userInfo?.role}</span>
+      </Text>}
+    </NavLink>
       <Menu
       className="flex-1"
         theme="dark"

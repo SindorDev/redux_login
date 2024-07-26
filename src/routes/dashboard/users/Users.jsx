@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button, Modal } from "antd";
 import { ContentTitle } from "../../../utils/index";
-import Table from "../../../components/table/Table"
+
 const Users = () => {
   const [open, setOpen] = useState(false);
 
@@ -13,6 +13,8 @@ const Users = () => {
     console.log("Clicked cancel button");
     setOpen(false);
   };
+
+
 
   return (
     <>
@@ -26,7 +28,6 @@ const Users = () => {
       </div>
 
       <div>
-        <Table/>
       </div>
 
 

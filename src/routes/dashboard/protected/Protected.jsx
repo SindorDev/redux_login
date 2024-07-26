@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { Navigate, Outlet } from "react-router-dom"
 const Protected = () => {
   const authData = useSelector(state => state)
-  if(!authData.state.token) {
+  if(!authData.token) {
     return  <Navigate to="/auth"/>
   }
   else {

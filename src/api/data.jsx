@@ -1,7 +1,7 @@
 import axios from "axios";
 import store from "../redux/store/store"
 
-const token = store.getState().state.token
+const token = store.getState().token
 
 
 const apiInstance = axios.create({

@@ -7,7 +7,6 @@ const initialState = {
      error: null,
      isSuccessful: false,
      isError: false,
-     productID: null
 }
 
 const reducer = (state = initialState, action) => {
@@ -43,15 +42,9 @@ const reducer = (state = initialState, action) => {
                     user: null,
                     ...state,
                }
-
-          case "PRODUCT_ID":
-               return {
-                    ...state,
-                    productID: action.id
-               }
           default: 
                return {
-                    state
+                    ...state
                }
      }
 }

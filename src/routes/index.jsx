@@ -8,15 +8,12 @@ const Dashboard = lazy(() => import("./dashboard/Dashboard"))
 const Products = lazy(() => import("./dashboard/products/Products"))
 const Users = lazy(() => import("./dashboard/users/Users"))
 const Protected = lazy(() => import("./dashboard/protected/Protected"))
+const Profile = lazy(() => import("./dashboard/profile/Profile"))
 import { SuspenseElement as Suspense } from "../utils/index";
 import { useSelector } from "react-redux";
 const RouteController = () => {
   const verify = useSelector(state => state)
-
-
-
   return useRoutes([
-    
     {
       
       path: "",
@@ -64,11 +61,15 @@ const RouteController = () => {
             {
               path: "users",
               element: <Suspense> <Users/> </Suspense>
+            },
+            {
+              path: "profile",
+              element: <Suspense> <Profile/> </Suspense>
             }
           ]
         }
       ]
-    }
+    },
   ])
 };
 

@@ -3,7 +3,6 @@ import { Button, Modal, Form, Select, Input } from "antd"
 import { ContentTitle } from "../../../utils/index"
 import {useFetch} from "../../../hooks/useFetch"
 import { useSelector } from "react-redux";
-import TableProduct from "../../../components/table/Table"
 const {TextArea} = Input
 
 const Products = () => {
@@ -39,7 +38,7 @@ const Products = () => {
       fetch("http://localhost:8000/product/create", {
         method: "POST",
         headers: {
-          "Authorization" : "Bearer " + authData.state.token
+          "Authorization" : "Bearer " + authData.token
         },
         body: form
       })
@@ -68,7 +67,7 @@ const Products = () => {
       fetch(`http://localhost:8000/product/update/${authData.productID}`, {
         method: "PUT",
         headers: {
-          "Authorization" : "Bearer " + authData.state.token
+          "Authorization" : "Bearer " + authData.token
         },
         body: form
       })
@@ -91,55 +90,6 @@ const Products = () => {
   const [categoryData] = useFetch("/product/category")
   const [productType] = useFetch("/product/product-type")
 
-
-  const columns = [
-    {
-      key: "name",
-      title: 'Name',
-      dataIndex: 'name',
-      sorter: true,
-    },
-    {
-      key: "original_price",
-      title: 'Original Price',
-      dataIndex: 'original_price',
-      sorter: true,
-    },
-    {
-      key: "sale_price",
-      title: 'Sale Price',
-      dataIndex: 'sale_price',
-      sorter: true,
-    },
-    {
-      key: "stock",
-      title: 'Stock',
-      dataIndex: 'number_in_stock',
-      sorter: true,
-    },
-    {
-      key: "category",
-      title: 'Category',
-      dataIndex: 'category',
-      sorter: true,
-    },
-    {
-      key: "product_type",
-      title: 'Product Type',
-      dataIndex: 'product_type',
-      sorter: true,
-    },
-    {
-      title: 'Update',
-      dataIndex: 'update',
-    },
-    {
-      title: 'Delete',
-      dataIndex: 'delete',
-    },
-  ];
-
-
   
   return (
     
@@ -157,7 +107,6 @@ const Products = () => {
     </div>
 
       <div className="h-full">
-        <TableProduct showModal={showModal} columns={columns} />
       </div>
     <Modal title="Add a new User" open={open} centered onCancel={handleCancel}  footer={null}>
 
