@@ -2,7 +2,7 @@ import { saveToLocalStorage } from "../../helpers/index"
 
 const initialState = {
      token: localStorage.getItem("x-auth-token") || null,
-     user: null,
+     user: JSON.parse(localStorage.getItem("User") || null),
      loading: false,
      error: null,
      isSuccessful: false,
@@ -15,6 +15,7 @@ const reducer = (state = initialState, action) => {
           case "LOGIN_USER":
           case "REGISTER_USER":
                saveToLocalStorage("x-auth-token", action.token)
+               localStorage.setItem("User", JSON.stringify(action.user))
                return {
                     ...state,
                     token: action.token,

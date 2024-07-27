@@ -23,3 +23,10 @@
      font-size: 12px !important;
      font-weight: 600;
 }
+
+* {
+     scroll-behavior: smooth;
+}
+*::-webkit-scrollbar {
+     display: none;
+   }

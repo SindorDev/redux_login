@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import axios from "../api/data"
-const useFetch = (url) => {
+const useFetch = (url, trigger) => {
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
 
@@ -20,7 +20,7 @@ const useFetch = (url) => {
         }
 
         loadData();
-    }, [url])
+    }, [url, trigger])
 
     return [ data, loading ]
 }

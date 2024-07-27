@@ -9,9 +9,11 @@ const Products = lazy(() => import("./dashboard/products/Products"))
 const Users = lazy(() => import("./dashboard/users/Users"))
 const Protected = lazy(() => import("./dashboard/protected/Protected"))
 const Profile = lazy(() => import("./dashboard/profile/Profile"))
+const LikedProducts = lazy(() => import("./dashboard/liked-products/LikedProducts"));
+const ProductDetails = lazy(() => import("../components/productDetails/ProductDetails"))
+const ProductCart = lazy(() => import("./cart/Cart")) 
 import { SuspenseElement as Suspense } from "../utils/index";
 import { useSelector } from "react-redux";
-import LikedProducts from "./dashboard/liked-products/LikedProducts";
 const RouteController = () => {
   const authData = useSelector(state => state)
   const [role, setRole] = useState(null)
@@ -86,6 +88,15 @@ const RouteController = () => {
         }
       ]
     },
+    {
+      path: "/productDetails/:id",
+      element: <Suspense> <ProductDetails/> </Suspense>
+    },
+    
+    {
+      path: "/productCart",
+      element: <Suspense> <ProductCart/> </Suspense>
+    }
   ])
 }
 

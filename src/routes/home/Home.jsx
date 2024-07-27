@@ -1,44 +1,57 @@
-import { Card, Button } from "antd";
-import { ShoppingCartOutlined } from "@ant-design/icons";
+/* eslint-disable no-unused-vars */
 import { useFetch } from "../../hooks/useFetch";
-import { CgDetailsMore } from "react-icons/cg";
-const { Meta } = Card;
+import { Fragment, useState } from "react";
+import CardComponent from "../../components/card/Card";
+import { useSelector } from "react-redux";
+import { NavLink } from "react-router-dom";
 
 const Home = () => {
-  const [{ payload }] = useFetch("/product/most-popular");
+  const [trigger, setTrigger] = useState(false);
+  const [{ payload }] = useFetch("/product/all", trigger);
+  const { username } = useSelector((state) => state.user);
 
   return (
-      <div className="max-w-[1300px] mx-auto">
-        <h1 className="text-4xl font-serif my-[20px] text-center">Most Popular</h1>
-        <div className="grid grid-cols-3 mx-auto gap-5">
-      {payload?.map((product) => (
-        <>
-        
-        <Card
-        style={{padding: "10px"}}
-          hoverable
-          cover={<img alt={product.product_name} style={{height: "300px", objectFit: "contain", borderRadius: "10px"}} src={product.product_images[0]} />}
-        >
-          <Meta style={{minHeight: "120px"}} title={product.product_name} description={product.description} />
-          <div style={{ marginTop: 16 }}>
-            <h3>${product.original_price}</h3>
-            <div className="w-full flex justify-between mt-5">
-              
-            <Button type="primary" icon={<ShoppingCartOutlined />}>
-              Add to Cart
-            </Button>
-            <Button type="primary" icon={<CgDetailsMore/>}>
-              More Details
-            </Button>
-            
-            </div>
-          </div>
-        </Card>
-        </>
-      ))}
-    </div>
+    <div className="min-h-screen bg-gray-100">
+      <header className="bg-white min-h-[80px] rounded-xl mb-[50px] shadow">
+        <div className="max-w-[1200px] h-[100%] py-[15px] mx-auto">
+          <div className="flex items-center h-full justify-between">
+            <h1 className="text-3xl font-bold text-center text-gray-900">
+              Home
+            </h1>
 
+            <ul className="flex items-center gap-5">
+              <li>
+                <NavLink className="px-5 py-1 bg-teal-600 text-white rounded-lg" to={"/auth"}>Login In</NavLink>
+              </li>
+              
+              <li>
+                <NavLink className="px-5 py-1 bg-teal-600 text-white rounded-lg" to={"/Dashboard"}>Dashboard</NavLink>
+              </li>
+              
+              <li>
+                <NavLink className="px-5 py-1 bg-teal-600 text-white rounded-lg" to={"/Dashboard/profile"}>Profile</NavLink>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+
+      <div className="max-w-[1300px] mx-auto">
+        <div className="grid grid-cols-3 mx-auto gap-5">
+
+          {payload?.map((product) => (
+            <Fragment key={product._id}>
+              <CardComponent
+                product={product}
+                trigger={trigger}
+                setTrigger={setTrigger}
+                username={username}
+              />
+            </Fragment>
+          ))}
+        </div>
       </div>
+    </div>
   );
 };
 
