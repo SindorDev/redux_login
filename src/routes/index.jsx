@@ -1,4 +1,4 @@
-import { lazy } from "react";
+import { lazy, useEffect, useState } from "react";
 import { Navigate, useRoutes } from "react-router-dom";
 const Home = lazy(() => import("./home/Home"));
 const Auth = lazy(() => import("./auth/index"));
@@ -11,8 +11,18 @@ const Protected = lazy(() => import("./dashboard/protected/Protected"))
 const Profile = lazy(() => import("./dashboard/profile/Profile"))
 import { SuspenseElement as Suspense } from "../utils/index";
 import { useSelector } from "react-redux";
+import LikedProducts from "./dashboard/liked-products/LikedProducts";
 const RouteController = () => {
   const authData = useSelector(state => state)
+  const [role, setRole] = useState(null)
+
+  useEffect(() => {
+    if(authData && authData.token) {
+      setRole(JSON.parse(atob(authData?.token.split(".")[1]))?.user.role)
+    }
+  }, [authData])
+
+
   return useRoutes([
     {
       
@@ -57,15 +67,20 @@ const RouteController = () => {
             {
               index: true,
               path: "",
-              element: <Suspense> <Products/> </Suspense>
+              element: role === "admin" ? <Suspense> <Products/> </Suspense> : <Navigate to="/dashboard/liked-products"/>
             },
             {
               path: "users",
-              element: <Suspense> <Users/> </Suspense>
+              element: role === "admin" ?  <Suspense> <Users/> </Suspense> : <Navigate to="/dashboard/liked-products"/>
             },
             {
               path: "profile",
               element: <Suspense> <Profile/> </Suspense>
+            },
+            
+            {
+              path: "liked-products",
+              element: <Suspense> <LikedProducts/> </Suspense>
             }
           ]
         }

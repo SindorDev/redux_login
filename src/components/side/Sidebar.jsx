@@ -3,6 +3,7 @@ import { Layout, Button,  Modal, Menu, Avatar, Typography } from "antd";
 import { NavLink } from "react-router-dom";
 import { useFetch } from "../../hooks/useFetch"
 import { LiaDoorOpenSolid } from "react-icons/lia";
+import { FaHeart } from "react-icons/fa";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 const { Sider } = Layout;
@@ -14,6 +15,7 @@ const Sidebar = ({ collapsed }) => {
   const [data] = useFetch("/auth/profile")
 
   const userInfo = data.payload
+  const role = userInfo?.role;
 
 
   const [open, setOpen] = useState(false);
@@ -74,22 +76,38 @@ const Sidebar = ({ collapsed }) => {
       className="flex-1"
         theme="dark"
         mode="inline"
-        defaultSelectedKeys={["1"]}
-        items={[
+        items={role === "admin" ? 
+          [
+            {
+              key: "1",
+              icon: <ProductFilled />,
+              label: <NavLink to={""}>Products</NavLink>,
+            },
+            {
+              key: "2",
+              icon: <UserOutlined />,
+              label: <NavLink to={"users"}>Users</NavLink>,
+            },
+            
+            {
+              key: "3",
+              icon: <FaHeart />,
+              label: <NavLink to={"liked-products"}>LikedProducts</NavLink>,
+            }
+          ]
+          :
+          [
+            
           {
             key: "1",
-            icon: <ProductFilled />,
-            label: <NavLink to={""}>Products</NavLink>,
-          },
-          {
-            key: "2",
-            icon: <UserOutlined />,
-            label: <NavLink to={"users"}>Users</NavLink>,
-          },
-        ]}
+            icon: <FaHeart />,
+            label:  <NavLink to={"liked-products"}>LikedProducts</NavLink>,
+          }
+          ]
+        }
       />
       <Button className="bg-red-500 w-full p-5 mb-[20px]" onClick={handleRemoveUser} type="primary"><LiaDoorOpenSolid size={"24px"} />{!collapsed && "Sign Out"}</Button>
-    </Sider>    
+    </Sider>
     </>
   )
 }

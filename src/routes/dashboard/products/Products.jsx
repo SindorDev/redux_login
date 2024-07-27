@@ -2,12 +2,10 @@ import { useState } from "react";
 import { Button, Modal } from "antd";
 import { ContentTitle } from "../../../utils/index";
 import { useFetch } from "../../../hooks/useFetch";
-import { useSelector } from "react-redux";
 import ProductFrom from "../../../components/productForm/ProductFrom";
 import TableComponent from "../../../components/table/Table";
 import axios from "../../../api/data";
 const Products = () => {
-  const authData = useSelector((state) => state);
   const [open, setOpen] = useState(false);
   const [updateProduct, setUpdateProduct] = useState(null);
   const [productImage, setProductImage] = useState(null);
@@ -133,40 +131,7 @@ const Products = () => {
     setUpdateProduct(null);
   };
 
-  const onFinish = (values) => {
-    const form = new FormData();
-    form.append("product_name", values.product_name);
-    form.append("description", values.description);
-    form.append("original_price", values.original_price);
-    form.append("sale_price", values.sale_price);
-    form.append("category", values.category[0]);
-    form.append("product_type", values.product_type[0]);
-    form.append("number_in_stock", values.number_in_stock);
 
-    for (let i = 0; i < productImage.length; i++) {
-      form.append("product_images", productImage[i]);
-    }
-
-    fetch(updateProduct ? `http://localhost:8000/product/update/${updateProduct._id}` : "http://localhost:8000/product/create", {
-      method: updateProduct ? "PUT" : "POST",
-      headers: {
-        Authorization: "Bearer " + authData.token,
-      },
-      body: form,
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        if (data.payload) {
-            setOpen(false);
-            window.location.reload();  
-            setUpdateProduct(null);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
 
   const handleOk = () => {
     try {
@@ -214,10 +179,10 @@ const Products = () => {
         open={open}
         setOpen={setOpen}
         handleCancel={handleCancel}
-        onFinish={onFinish}
         updateProduct={updateProduct}
         setUpdateProduct={setUpdateProduct}
         setProductImage={setProductImage}
+        productImage={productImage}
         categoryData={categoryData}
         productType={productType}
         footer={false}
