@@ -1,15 +1,18 @@
+/* eslint-disable no-fallthrough */
 import { saveToLocalStorage } from "../../helpers/index"
 
 const initialState = {
      token: localStorage.getItem("x-auth-token") || null,
-     user: JSON.parse(localStorage.getItem("User") || null),
+     user: JSON.parse(localStorage.getItem("User")) || null,
      loading: false,
      error: null,
      isSuccessful: false,
      isError: false,
+     productCart: JSON.parse(localStorage.getItem("productCart")) || []
 }
 
 const reducer = (state = initialState, action) => {
+     console.log(action);
      switch(action.type) {
 
           case "LOGIN_USER":
@@ -37,17 +40,31 @@ const reducer = (state = initialState, action) => {
                     error: action.message
                }
                
-          case "SIGN_OUT":
+          case "SIGN_OUT":{
                localStorage.removeItem("x-auth-token")
                return {
                     ...state,
                     token: null,
                     user: null,
                }
+          }
+               case "ADD_TO_CART": {
+                    const isUserExist = state.productCart.find(product => product._id === action.product._id)
+                    if(!isUserExist) {
+                         saveToLocalStorage("productCart", [...state.productCart, action.product])
+                         return {...state, productCart: [...state.productCart , action.product]}     
+                    }
+          }
+          case "REMOVE_FROM_CART": {
+               const newState =  state.productCart.filter((user) => user._id !== action.product._id)
+               saveToLocalStorage("productCart", newState)
+          return {...state, productCart: newState}
+     }
           default: 
                return {
                     ...state
                }
+          
      }
 }
 export default reducer

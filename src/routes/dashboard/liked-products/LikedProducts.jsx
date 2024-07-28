@@ -88,7 +88,7 @@ const Users = () => {
       </div>
 
       <div>
-          <TableComponent tableParams={tableParams} setTableParams={setTableParams} columns={columns} url="/product/most-popular"/>
+          <TableComponent tableParams={tableParams} setTableParams={setTableParams} columns={columns} url="/auth/profile/liked-products"/>
       </div>
 
     </>

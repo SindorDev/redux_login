@@ -1,3 +1,4 @@
+import { BiCartAlt } from "react-icons/bi"; 
 import { UserOutlined, ProductFilled } from "@ant-design/icons";
 import { Layout, Button,  Modal, Menu, Avatar, Typography } from "antd";
 import { NavLink } from "react-router-dom";
@@ -93,6 +94,11 @@ const Sidebar = ({ collapsed }) => {
               key: "3",
               icon: <FaHeart />,
               label: <NavLink to={"liked-products"}>LikedProducts</NavLink>,
+            },
+            {
+              key: "4",
+              icon: <BiCartAlt />,
+              label: <NavLink to={"productCart"}>Cart</NavLink>,
             }
           ]
           :
@@ -100,8 +106,13 @@ const Sidebar = ({ collapsed }) => {
             
           {
             key: "1",
-            icon: <FaHeart />,
+            icon: <BiCartAlt />,
             label:  <NavLink to={"liked-products"}>LikedProducts</NavLink>,
+          },
+          {
+            key: "2",
+            icon: <FaHeart />,
+            label: <NavLink to={"productCart"}>Cart</NavLink>,
           }
           ]
         }

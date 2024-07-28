@@ -83,6 +83,10 @@ const RouteController = () => {
             {
               path: "liked-products",
               element: <Suspense> <LikedProducts/> </Suspense>
+            },
+            {
+              path: "productCart",
+              element: <Suspense> <ProductCart/> </Suspense>
             }
           ]
         }
@@ -93,10 +97,7 @@ const RouteController = () => {
       element: <Suspense> <ProductDetails/> </Suspense>
     },
     
-    {
-      path: "/productCart",
-      element: <Suspense> <ProductCart/> </Suspense>
-    }
+    
   ])
 }
 

@@ -7,6 +7,7 @@ import { Carousel, Card, Button, Spin } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import { CgDetailsMore } from "react-icons/cg";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import axios from "../../api/data";
 import { useNavigate } from "react-router-dom";
 const { Meta } = Card;
@@ -21,6 +22,7 @@ const contentStyle = {
 };
 const CardComponent = ({product, setTrigger, trigger, username}) => {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
      const [loading, setLoading] = useState(false)
 
 
@@ -37,8 +39,15 @@ const CardComponent = ({product, setTrigger, trigger, username}) => {
           } catch (error) {
             console.log(error);
           }
-        };
+      };
+
+      const handleAddCart = (product) => {
+        dispatch({type: "ADD_TO_CART", product: product})
+      }
+
+
      return (
+
      <Card
        style={{ padding: "10px" }}
        hoverable
@@ -62,14 +71,14 @@ const CardComponent = ({product, setTrigger, trigger, username}) => {
        }
      >
        <Meta
-         style={{ minHeight: "120px" }}
+         style={{ minHeight: "100px" }}
          title={product.product_name}
-         description={product.description}
+         description={product.description.slice(0, 100)+"..."}
        />
        <div style={{ marginTop: 16 }}>
          <h3>${product.original_price}</h3>
          <div className="w-full flex justify-between mt-5">
-           <Button onClick={() => navigate("/productCart")} type="primary" icon={<ShoppingCartOutlined />}>
+           <Button onClick={() => handleAddCart(product)} type="primary" icon={<ShoppingCartOutlined />}>
              Add to Cart
            </Button>
            <Button onClick={() => navigate(`/productDetails/${product._id}`)} type="primary" icon={<CgDetailsMore />}>

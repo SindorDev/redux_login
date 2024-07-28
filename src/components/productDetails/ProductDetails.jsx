@@ -65,7 +65,7 @@ const ProductDetails = () => {
           </Button>
       </Link>
       
-      <Link to={"/dashboard"} className="ml-[10px]">
+      <Link to={"/Dashboard/productCart"} className="ml-[10px]">
         <Badge count={count}>
           <Avatar shape="square" size="normal">
             <BiCartAlt size={20} />
