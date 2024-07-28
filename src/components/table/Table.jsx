@@ -19,6 +19,7 @@ const TableComponent = ({tableParams, setTableParams, columns, url}) => {
      axios(url, {
           params: getRandomuserParams(tableParams),
      })
+
       .then(response =>{
       setLoading(false);
       setData(response.data.payload);
@@ -32,6 +33,7 @@ const TableComponent = ({tableParams, setTableParams, columns, url}) => {
      })
   };
 
+  console.log(data);
   useEffect(() => {
     fetchData();
   }, [
