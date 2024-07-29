@@ -17,6 +17,7 @@ const Products = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const showModal = () => {
     setOpen(true);
+    setUpdateProduct(null);
   };
 
   const [tableParams, setTableParams] = useState({
@@ -189,6 +190,7 @@ const Products = () => {
         productType={productType}
         footer={false}
         forceRender={true}
+
      />
 
       <Modal

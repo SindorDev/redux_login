@@ -106,12 +106,12 @@ const Sidebar = ({ collapsed }) => {
             
           {
             key: "1",
-            icon: <BiCartAlt />,
+            icon: <FaHeart />,
             label:  <NavLink to={"liked-products"}>LikedProducts</NavLink>,
           },
           {
             key: "2",
-            icon: <FaHeart />,
+            icon: <BiCartAlt />,
             label: <NavLink to={"productCart"}>Cart</NavLink>,
           }
           ]
