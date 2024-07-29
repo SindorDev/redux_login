@@ -35,6 +35,7 @@ const Products = () => {
   const columns = [
     
     
+    
     {
       count: 1,
       title: "No",

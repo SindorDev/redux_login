@@ -12,6 +12,8 @@ const Profile = lazy(() => import("./dashboard/profile/Profile"))
 const LikedProducts = lazy(() => import("./dashboard/liked-products/LikedProducts"));
 const ProductDetails = lazy(() => import("../components/productDetails/ProductDetails"))
 const ProductCart = lazy(() => import("./cart/Cart")) 
+const Category = lazy(() => import("./category/Category"))
+const Notifications = lazy(() => import("./dashboard/notifications/Notifications"))
 import { SuspenseElement as Suspense } from "../utils/index";
 import { useSelector } from "react-redux";
 const RouteController = () => {
@@ -87,6 +89,11 @@ const RouteController = () => {
             {
               path: "productCart",
               element: <Suspense> <ProductCart/> </Suspense>
+            },
+            
+            {
+              path: "notifications",
+              element: <Suspense> <Notifications/> </Suspense>
             }
           ]
         }
@@ -96,8 +103,12 @@ const RouteController = () => {
       path: "/productDetails/:id",
       element: <Suspense> <ProductDetails/> </Suspense>
     },
-    
-    
+
+    {
+      path: "/category/:categoryName",
+      element: <Suspense> <Category/> </Suspense>
+    },
+
   ])
 }
 

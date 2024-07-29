@@ -1,14 +1,12 @@
-import { BiCartAlt } from "react-icons/bi"; 
-import { useParams, Link } from "react-router-dom";
+import { useParams,  } from "react-router-dom";
 import { useFetch } from "../../hooks/useFetch";
 import { useEffect, useRef, useState } from "react";
-import { Avatar, Carousel, Badge, Button } from "antd";
+import { Carousel, Button } from "antd";
 import { MinusOutlined, PlusOutlined,} from '@ant-design/icons';
-
+import Navbar from "../../components/nav/Navbar"
+import Message from "../../components/message/Message"
+import CategoryList from "../../components/categoryList/CategoryList"
 const ButtonGroup = Button.Group;
-
-
-
 const contentStyle = {
   margin: 0,
   width: '100%',
@@ -22,7 +20,7 @@ const ProductDetails = () => {
   const carusel = useRef()
   const caruselPagination = useRef()
   const [currentIndex, setCurrentIndex] = useState(null)
-  const [{payload}] = useFetch("product/" + id);
+  const [{payload}] = useFetch("product/single-product/" + id);
   const [count, setCount] = useState(5);
 
   const increase = () => {
@@ -48,35 +46,9 @@ const ProductDetails = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <header className="bg-white shadow">
-      <div className="max-w-[1200px]  mx-auto">
-      <div className="flex items-center justify-between">
-      <Link to={"/"}>
-          <Button className="bg-slate-400 text-white">
-            Home
-          </Button>
-      </Link>
-        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold text-center text-gray-900">Product Details</h1>
-        </div>
-        <Link to={"/dashboard"}>
-          <Button className="bg-slate-400 text-white">
-            Dashboard
-          </Button>
-      </Link>
-      
-      <Link to={"/Dashboard/productCart"} className="ml-[10px]">
-        <Badge count={count}>
-          <Avatar shape="square" size="normal">
-            <BiCartAlt size={20} />
-          </Avatar>
-        </Badge>
-      </Link>
-      
-      </div>
-      </div>
-      </header>
-
+      <Navbar/>
+      <Message/>
+      <CategoryList/>
       <main>
         <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
           <div className="overflow-hidden bg-white shadow-xl sm:rounded-lg">

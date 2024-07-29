@@ -49,7 +49,7 @@ const CardComponent = ({product, setTrigger, trigger, username}) => {
      return (
 
      <Card
-       style={{ padding: "10px" }}
+       style={{ padding: "5px" }}
        hoverable
        cover={
         <Carousel arrows autoplay infinite={true}>

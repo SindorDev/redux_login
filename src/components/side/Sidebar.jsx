@@ -1,6 +1,7 @@
+import { BiNotification } from "react-icons/bi"; 
 import { BiCartAlt } from "react-icons/bi"; 
 import { UserOutlined, ProductFilled } from "@ant-design/icons";
-import { Layout, Button,  Modal, Menu, Avatar, Typography } from "antd";
+import { Layout, Button,  Modal, Menu, Avatar, Typography, Badge } from "antd";
 import { NavLink } from "react-router-dom";
 import { useFetch } from "../../hooks/useFetch"
 import { LiaDoorOpenSolid } from "react-icons/lia";
@@ -14,14 +15,14 @@ const {Text} = Typography
 const Sidebar = ({ collapsed }) => {
   const dispatch = useDispatch()
   const [data] = useFetch("/auth/profile")
-
   const userInfo = data.payload
   const role = userInfo?.role;
-
 
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [modalText, setModalText] = useState('Do you really want to log out?');
+  const [{payload}] = useFetch("notifications/all")
+
   const showModal = () => {
     setOpen(true);
   };
@@ -56,8 +57,9 @@ const Sidebar = ({ collapsed }) => {
       </Modal>
     <Sider trigger={null} collapsible collapsed={collapsed} className="px-[5px] py-[10px] flex flex-col justify-between ">
       
-    <NavLink  className="flex p-5  whitespace-nowrap overflow-hidden gap-2 items-center" to={"/dashboard/profile"}>
+    <NavLink  className="flex p-5  whitespace-nowrap overflow-hidden gap-5 items-center" to={"/dashboard/profile"}>
         
+    <Badge count={payload?.length} overflowCount={9} size="small">
     <Avatar
      style={{
       fontSize: "16px",
@@ -66,6 +68,8 @@ const Sidebar = ({ collapsed }) => {
     }} >
       {userInfo?.first_name[0]}
     </Avatar>
+    </Badge>
+
           {!collapsed && 
       <Text className="text-white  flex flex-col">
         
@@ -81,24 +85,29 @@ const Sidebar = ({ collapsed }) => {
           [
             {
               key: "1",
-              icon: <ProductFilled />,
+              icon: <ProductFilled size={24} />,
               label: <NavLink to={""}>Products</NavLink>,
             },
             {
               key: "2",
-              icon: <UserOutlined />,
+              icon: <UserOutlined size={24} />,
               label: <NavLink to={"users"}>Users</NavLink>,
             },
             
             {
               key: "3",
-              icon: <FaHeart />,
+              icon: <FaHeart size={17} />,
               label: <NavLink to={"liked-products"}>LikedProducts</NavLink>,
             },
             {
               key: "4",
-              icon: <BiCartAlt />,
+              icon: <BiCartAlt size={20} />,
               label: <NavLink to={"productCart"}>Cart</NavLink>,
+            },
+            {
+              key: "5",
+              icon: <BiNotification size={20} />,
+              label: <NavLink to={"notifications"}>Notifications</NavLink>,
             }
           ]
           :
@@ -106,13 +115,18 @@ const Sidebar = ({ collapsed }) => {
             
           {
             key: "1",
-            icon: <FaHeart />,
+            icon: <FaHeart size={17} />,
             label:  <NavLink to={"liked-products"}>LikedProducts</NavLink>,
           },
           {
             key: "2",
-            icon: <BiCartAlt />,
+            icon: <BiCartAlt size={20} />,
             label: <NavLink to={"productCart"}>Cart</NavLink>,
+          },
+          {
+            key: "3",
+            icon: <BiNotification size={20} />,
+            label: <NavLink to={"notifications"}>Notifications</NavLink>,
           }
           ]
         }

@@ -60,8 +60,7 @@ const ProductFrom = ({open, handleCancel, setOpen, setUpdateProduct, productImag
 
      return (
      
-    <Modal title="Add a new User" open={open} centered onCancel={handleCancel} forceRender={true}  footer={null}>
-
+    <Modal title={updateProduct ? "Update Product" : "Add Product"} open={open} centered onCancel={handleCancel} forceRender={true}  footer={null}>
 
     <Form
     form={form}

@@ -32,8 +32,6 @@ const TableComponent = ({tableParams, setTableParams, columns, url}) => {
         });
      })
   };
-
-  console.log(data);
   useEffect(() => {
     fetchData();
   }, [
