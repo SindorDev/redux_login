@@ -42,6 +42,8 @@ const reducer = (state = initialState, action) => {
                
           case "SIGN_OUT":{
                localStorage.removeItem("x-auth-token")
+               localStorage.removeItem("productCart")
+               localStorage.removeItem("User")
                return {
                     ...state,
                     token: null,

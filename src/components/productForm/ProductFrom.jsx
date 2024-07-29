@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 const {TextArea} = Input
 import { Button, Modal, Form, Select, Input } from "antd"
