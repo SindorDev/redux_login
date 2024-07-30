@@ -150,9 +150,6 @@ const Products = () => {
       setModalOpen(false);
       setConfirmLoading(false);
     }, 1500);
-    setTimeout(() => {
-      window.location.reload();
-    }, 1600);
   };
 
   const [categoryData] = useFetch("/product/category");

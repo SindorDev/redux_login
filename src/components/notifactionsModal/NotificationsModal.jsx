@@ -1,29 +1,21 @@
 /* eslint-disable react/prop-types */
-import { Button, Select, Form, Input, Modal } from "antd";
-import { useEffect } from "react";
+import { Button, Form, Input, Modal } from "antd";
+import axios from "../../api/data"
 const { TextArea } = Input;
 
 const onFinishFailed = (errorInfo) => {
   console.log("Failed:", errorInfo);
 };
-const NotificationsModal = ({ open, setOpen, updateMessage, setUpdateMessage }) => {
+const NotificationsModal = ({ open, setOpen,  }) => {
   const [form] = Form.useForm();
 
   const onFinish = async (values) => {
     try {
-       const response = await fetch(updateMessage ? `http://localhost:8000/notifications/update` : "http://localhost:8000/notifications/create", {
-        method: updateMessage ? "PATCH" : "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("x-auth-token"),
-        },
-        body: JSON.stringify(values),
-      });
-      const data = await response.json()
-   setInterval(() => {
-    if (data.paload) {
+      const response = await axios.post("/notifications/create", values);
+  
+       setInterval(() => {
+    if (response.status === 200) {
       setOpen(false);
-      setUpdateMessage(null);
       window.location.reload()
     }
    }, 1000);
@@ -32,23 +24,10 @@ const NotificationsModal = ({ open, setOpen, updateMessage, setUpdateMessage }) 
       console.log(error);
     }
   };
-  const handleChange = async (value) => {
-    console.log(value);
-  };
 
-  useEffect(() => {
-    form.setFieldsValue({
-      ...updateMessage,
-    });
-
-    if (updateMessage === null) {
-      form.resetFields();
-    }
-  }, [updateMessage]);
 
   const handleCancel = () => {
     setOpen(false);
-    setUpdateMessage(null);
   };
 
   return (
@@ -64,7 +43,6 @@ const NotificationsModal = ({ open, setOpen, updateMessage, setUpdateMessage }) 
           form={form}
           name="basic"
           layout="vertical"
-          initialValue={updateMessage ? updateMessage : null}
           labelCol={{
             span: 16,
           }}
@@ -90,32 +68,6 @@ const NotificationsModal = ({ open, setOpen, updateMessage, setUpdateMessage }) 
           >
             <TextArea rows={4} style={{ resize: "none" }} />
           </Form.Item>
-            
-            {
-              updateMessage &&
-              <Form.Item
-                label="Active"
-                name="active"
-                initialValue={updateMessage && updateMessage?.active}
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your active!",
-                  },
-                ]}
-              >
-                <Select
-                  defaultValue="true"
-                  style={{ width: 120 }}
-                  onChange={handleChange}
-                  options={[
-                    { value: "true", label: "true" },
-                    { value: "false", label: "false" },
-                  ]}
-                />
-              </Form.Item>
-            }
-
           <Form.Item
             wrapperCol={{
               offset: 24,

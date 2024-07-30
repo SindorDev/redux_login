@@ -3,13 +3,15 @@ import { Button } from "antd";
 import { ContentTitle } from "../../../utils/index";
 import TableComponent from "../../../components/table/Table";
 import NotificationsModal from "../../../components/notifactionsModal/NotificationsModal";
-import axios from "../../../api/data"
+import axios from "../../../api/data";
+
 const Notifications = () => {
   const [open, setOpen] = useState(false);
-  const [updateMessage, setUpdateMessage] = useState(null)
+  const [trigger, setTrigger] = useState(false);
   const showModal = () => {
     setOpen(true);
   };
+
   const [tableParams, setTableParams] = useState({
     pagination: {
       current: 1,
@@ -17,32 +19,46 @@ const Notifications = () => {
     },
   });
 
-  const handleUpdateMessage = async (product) => {
-    setUpdateMessage(product)
-    setOpen(true)
-  }
+  const handleUpdateMessage = async (id) => {
+ 
+    try {
+      const response = await axios.patch("/notifications/update", {
+        id,
+        active: false
+      }, trigger );
+
+      console.log(response);
+      window.location.reload()
+      setTrigger(!trigger)
+    }
+    catch(error) {
+      console.log(error);
+    }
+ 
+  };
 
   const handleDeleteMessage = async (id) => {
-      try {
-        const response = await axios.delete(`notifications/delete/${id}`)
-        setInterval(() => {
-          if(response.status === 200) {
-            window.location.reload()
-          }
-        }, 1000)
-      }
-      catch(error) {
-        console.log(error)
-      }
-  }
+    try {
+      await axios.delete(`notifications/delete/${id}`, trigger);
+      setTrigger(!trigger)
+      window.location.reload()
+    } catch (error) {
+      console.log(error);
+    }
+    console.log(trigger);
+  };
+
 
   const columns = [
+
 
     {
       count: 1,
       title: 'No',
       key: "id",
-      render: (data, current, index) => tableParams.pagination.current * tableParams.pagination.pageSize - tableParams.pagination.pageSize + (index + 1),
+      render: (data, current, index) =>
+        tableParams.pagination.current * tableParams.pagination.pageSize -
+        tableParams.pagination.pageSize + (index + 1),
     },
     {
       key: "name",
@@ -50,24 +66,29 @@ const Notifications = () => {
       dataIndex: 'message',
       render: (message) => `${message}`,
     },
-    
-    
     {
       key: "active",
       title: 'Active',
       dataIndex: 'active',
       render: (active) => `${active}`,
     },
-     {
+    
+    {
+      key: "Created At",
+      title: 'Created At',
+      dataIndex: 'announcedDate',
+      render: (data) => new Date(data).toLocaleDateString('uz-UZ', { timeZone: 'Asia/Tashkent' }),
+    },
+    {
       key: "Action",
       title: "Action",
       render: (product) => (
         <div className="flex items-center gap-2 ">
           <Button
             className="bg-yellow-400 text-white"
-            onClick={() => handleUpdateMessage(product)}
+            onClick={() => handleUpdateMessage(product._id)}
           >
-            Update
+            Read
           </Button>
           <Button
             danger
@@ -80,11 +101,12 @@ const Notifications = () => {
       ),
       with: "10%",
     },
-  ]
+  ];
 
   const handleAddMessage = () => {
-    showModal()
-  }
+    showModal();
+  };
+
   return (
     <>
       <div>
@@ -97,11 +119,20 @@ const Notifications = () => {
       </div>
 
       <div>
-          <TableComponent tableParams={tableParams} setTableParams={setTableParams} columns={columns} url="/notifications/all"/>
+        <TableComponent
+          tableParams={tableParams}
+          setTableParams={setTableParams}
+          columns={columns}
+          url="/notifications/all"
+        />
       </div>
 
-
-      <NotificationsModal open={open} setOpen={setOpen} updateMessage={updateMessage} setUpdateMessage={setUpdateMessage} forceRender={true}  showModal={showModal}/>
+      <NotificationsModal
+        open={open}
+        setOpen={setOpen}
+        forceRender={true}
+        showModal={showModal}
+      />
     </>
   );
 };

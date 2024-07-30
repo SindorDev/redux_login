@@ -13,7 +13,6 @@ const TableComponent = ({tableParams, setTableParams, columns, url}) => {
   const [data, setData] = useState();
   const [loading, setLoading] = useState(false);
 
-
   const fetchData = () => {
     setLoading(true);
      axios(url, {
@@ -52,7 +51,6 @@ const TableComponent = ({tableParams, setTableParams, columns, url}) => {
     if (pagination.pageSize !== tableParams.pagination?.pageSize) {
       setData([]);
     }
-    console.log(sorter);
   };
   return (
     <Table
