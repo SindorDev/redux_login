@@ -3,30 +3,35 @@
 @tailwind utilities;
 
 .shadow-cm {
-     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
 .ant-col {
-     text-align: start !important;
-     margin: 0;
-     width: 100% !important;
+  text-align: start !important;
+  margin: 0;
+  width: 100% !important;
 }
-.ant-form-item{
-     margin-bottom: 5px !important;
+.ant-form-item {
+  margin-bottom: 5px !important;
 }
 
 .ant-layout-sider-children {
-     display: flex;
-     flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 .ant-form-item-required {
-     font-size: 12px !important;
-     font-weight: 600;
+  font-size: 12px !important;
+  font-weight: 600;
 }
 
 * {
-     scroll-behavior: smooth;
+  scroll-behavior: smooth;
 }
 *::-webkit-scrollbar {
-     display: none;
-   }
+  display: none;
+}
+
+.ant-menu-item:has(.active) {
+  background: #1677ff;
+  color: #ffffff;
+}

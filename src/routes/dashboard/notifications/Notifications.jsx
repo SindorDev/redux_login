@@ -45,12 +45,6 @@ const Notifications = () => {
       render: (data, current, index) => tableParams.pagination.current * tableParams.pagination.pageSize - tableParams.pagination.pageSize + (index + 1),
     },
     {
-      key: "id",
-      title: 'ID',
-      dataIndex: '_id',
-      render: (id) => `${id}`,
-    },
-    {
       key: "name",
       title: 'Name',
       dataIndex: 'message',
