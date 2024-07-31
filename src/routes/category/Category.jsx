@@ -5,6 +5,7 @@ import { Fragment } from "react";
 import CardComponent from "../../components/card/Card";
 import { useSelector } from "react-redux";
 import Navbar from "../../components/nav/Navbar";
+import Message from "../../components/message/Message"
 import CategoryList from "../../components/categoryList/CategoryList";
 const Category = () => {
   const  {categoryName}  = useParams();
@@ -15,6 +16,7 @@ const Category = () => {
   return (
     <>
     <Navbar/>
+    <Message/>
     <CategoryList/>
     <div className="max-w-[1400px] mt-[30px] mx-auto">
     <div className="grid grid-cols-4 mx-auto gap-5">

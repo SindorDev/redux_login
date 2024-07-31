@@ -6,9 +6,8 @@ const Message = () => {
 
   const [{payload}, loading] = useFetch("notifications/all")
 
-  console.log(payload);
   return (
-    <div className='max-w-[1400px] bg-[#edf2f4] mx-auto py-[5px] rounded-lg my-[10px]'>
+    <div className='max-w-[1440px] bg-[#edf2f4] mx-auto py-[5px] rounded-lg my-[10px]'>
       
      <Carousel speed={400} dots={false} autoplay>
       {

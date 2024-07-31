@@ -19,7 +19,7 @@ const Navbar = () => {
 
   return (
     <header className="bg-white min-h-[80px] rounded-xl mb-[10px] shadow">
-      <div className="max-w-[1400px] py-[15px] mx-auto">
+      <div className="max-w-[1440px] py-[15px] mx-auto">
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold text-center text-gray-900">Home</h1>
 

@@ -35,3 +35,6 @@
   background: #1677ff;
   color: #ffffff;
 }
+.ant-input-group-compact {
+  display: flex !important;
+}
