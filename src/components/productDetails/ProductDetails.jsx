@@ -24,10 +24,12 @@ const ProductDetails = () => {
   const [count, setCount] = useState(5);
 
   const increase = () => {
+
     setCount(count + 1);
   };
 
   useEffect(() => {
+    
     if(currentIndex >= 5) {
     caruselPagination.current.scrollTo(0, currentIndex * 200)
     } 
@@ -37,6 +39,7 @@ const ProductDetails = () => {
   }, [currentIndex])
 
   const decline = () => {
+
     let newCount = count - 1;
     if (newCount < 0) {
       newCount = 0;
