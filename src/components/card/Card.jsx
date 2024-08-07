@@ -76,7 +76,7 @@ const CardComponent = ({product, setTrigger, trigger, username}) => {
          description={product.description.slice(0, 100)+"..."}
        />
        <div style={{ marginTop: 16 }}>
-         <h3>${product.original_price}</h3>
+         <h3>${product.sale_price}</h3>
          <div className="w-full flex justify-between mt-5">
            <Button onClick={() => handleAddCart(product)} type="primary" icon={<ShoppingCartOutlined />}>
              Add to Cart

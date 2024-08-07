@@ -18,13 +18,7 @@ const Home = () => {
   const { username } = useSelector((state) => state.user) || "";
   const [data] = useFetch("/product/product-type");
   const cat = categoryValue?.map((item) => `type=${item}`).join("&")
-  const [{ payload }, isLoading] = useFetch(
-    `/product/${
-      categoryValue.length > 0 ? `by?${cat}` : "most-popular"
-    }${min ? `&min_price
-      =${min}` : ""}${max ? `&max_price=${max}` : ""}`,
-    trigger
-  );
+  const [{ payload }, isLoading] = useFetch(`/product/${categoryValue.length > 0 ? `by?${cat}`:"all"}${min ? `&min_price=${min}`:""}${max?`&max_price=${max}`:""}`,trigger);
 
   useEffect(() => {
     setTrigger(!trigger);
